@@ -76,7 +76,7 @@ public class GeneticAlgorithm {
         // use one of the offspring techniques suggested in class (also applying any mutations) HERE
 
 		float getRand = 0;		
-		for (int i = 0; i < this.size(); i++) {
+		for (int i = 0; i < POPULATION_SIZE; i++) {
 			getRand = new Random().nextFloat();
 			if (getGene(i).getFitness() >= getRand) {
 				selected[i] = true;
@@ -117,7 +117,7 @@ public class GeneticAlgorithm {
         int cannotMate[] = new int[POPULATION_SIZE];
         int parentA = 0;
         int parentB = 0;
-        Gene newChild = new Gene();
+     
 
         for(int i = 0; i < POPULATION_SIZE; i++)
         {
@@ -135,7 +135,7 @@ public class GeneticAlgorithm {
                 for(int j = 0; j < CHROMOSOME_SIZE; j++)
                 {
 //                    nextGen[pointer1][j] = inputs[i][j];
-                    nextGen.get(pointer1).mChromosome[j] = mPopulation.get(i).mChromosome[j];
+                    nextGen.s(pointer1).mChromosome[j] = mPopulation.get(i).mChromosome[j];
                 } // j
                 pointer1++;
             }else{ // Cannot mate.
