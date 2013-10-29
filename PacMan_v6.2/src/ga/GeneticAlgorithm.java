@@ -99,7 +99,7 @@ public class GeneticAlgorithm {
             float minFitness=Float.POSITIVE_INFINITY;
             float maxFitness=Float.NEGATIVE_INFINITY;
             String bestIndividual="";
-		String worstIndividual="";
+            String worstIndividual="";
             for(int i = 0; i < population.size(); i++){
                 float currFitness = population.getGene(i).getFitness();
                 avgFitness += currFitness;

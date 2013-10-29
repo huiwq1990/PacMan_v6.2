@@ -37,6 +37,9 @@ public class Gene {
      */
     public void randomizeChromosome(){
         // code for randomization of initial weights goes HERE
+    	for(int i=0; i<mChromosome.length;i++ ){
+    		
+    	}
     }
 
     /**
