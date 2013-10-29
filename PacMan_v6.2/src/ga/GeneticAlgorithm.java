@@ -20,7 +20,8 @@ public class GeneticAlgorithm {
     static int POPULATION_SIZE=500;
 
     // --- variables:
-
+    static  boolean selected[] = new boolean[POPULATION_SIZE];
+    static  ArrayList<Gene> nextGen = new ArrayList<Gene>();      // Next population.
     /**
      * The population contains an ArrayList of genes (the choice of arrayList over
      * a simple array is due to extra functionalities of the arrayList, such as sorting)
@@ -52,6 +53,17 @@ public class GeneticAlgorithm {
     public void evaluateGeneration(){
         for(int i = 0; i < mPopulation.size(); i++){
             // evaluation of the fitness function for each gene in the population goes HERE
+        	int count = 0;
+        	Gene g = this.getGene(i);
+        	for(int numC = 0; numC < CHROMOSOME_SIZE; numC++){
+        		char c = g.getPhenotype().charAt(numC);
+        		if(c=='A'){
+                    count++;
+                } 
+        	}
+        	
+        	g.setFitness(count*1.0f/CHROMOSOME_SIZE);
+        	
         }
     }
     /**
@@ -62,8 +74,135 @@ public class GeneticAlgorithm {
      */
     public void produceNextGeneration(){
         // use one of the offspring techniques suggested in class (also applying any mutations) HERE
+
+		float getRand = 0;		
+		for (int i = 0; i < this.size(); i++) {
+			getRand = new Random().nextFloat();
+			if (getGene(i).getFitness() >= getRand) {
+				selected[i] = true;
+			} else {
+				selected[i] = false;
+			}
+		}
+		
+		mating();
+		
+		
+		  for(int i = 0; i < POPULATION_SIZE; i++)
+	        {
+	            for(int j = 0; j < CHROMOSOME_SIZE; j++)
+	            {
+//	                inputs[i][j] = nextGen[i][j];
+	            	mPopulation.get(i).mChromosome[j] = nextGen.get(i).mChromosome[j];
+	            } // j
+	        } // i
+
+	        // Reset flags for selected individuals.
+	        for(int i = 0; i < POPULATION_SIZE; i++)
+	        {
+	            selected[i] = false;
+	        }
+		
     	
-    	
+    }
+    
+    
+    
+    private  void mating()
+    {
+        int pointer1 = 0;
+        int pointer2 = 0;
+        int maxChild = 0;
+        int canMate = 0;
+        int cannotMate[] = new int[POPULATION_SIZE];
+        int parentA = 0;
+        int parentB = 0;
+        Gene newChild = new Gene();
+
+        for(int i = 0; i < POPULATION_SIZE; i++)
+        {
+            cannotMate[i] = -1;
+        }
+
+        // Determine total who can mate.
+        pointer1 = 0;
+        pointer2 = 0;
+        for(int i = 0; i < POPULATION_SIZE; i++)
+        {
+            if(selected[i] == true){
+                canMate++;
+                // Copy selected individuals to next generation.
+                for(int j = 0; j < CHROMOSOME_SIZE; j++)
+                {
+//                    nextGen[pointer1][j] = inputs[i][j];
+                    nextGen.get(pointer1).mChromosome[j] = mPopulation.get(i).mChromosome[j];
+                } // j
+                pointer1++;
+            }else{ // Cannot mate.
+                cannotMate[pointer2] = i;
+                pointer2++;
+            }
+        } // i
+
+        maxChild = POPULATION_SIZE - canMate; // Total number of offspring to be created.
+
+        if(canMate > 1 && pointer2 > 0){
+            for(int i = 0; i < maxChild; i++)
+            {
+                parentA = chooseParent();
+                parentB = chooseParent(parentA);
+                Gene[] ch = mPopulation.get(parentA).reproduce(mPopulation.get(parentB));
+                for(int j = 0; j < CHROMOSOME_SIZE; j++)
+                {
+                	nextGen.get(pointer1).mChromosome[j] =ch[0].mChromosome[j];
+                } // j
+                pointer1++;
+            } // i
+        }
+        return;
+    }
+    
+    private  int chooseParent()
+    {
+        // Overloaded function, see also "ChooseParent(ByVal ParentA As Integer)".
+        int parent = 0;
+        boolean done = false;
+
+        while(!done)
+        {
+            // Randomly choose an eligible parent.
+            parent = getRandomNumber(POPULATION_SIZE - 1);
+            if(selected[parent] == true){
+                done = true;
+            }
+        }
+
+        return parent;
+    }
+
+    private  int chooseParent(int parentA)
+    {
+        // Overloaded function, see also "ChooseParent()".
+        int parent = 0;
+        boolean done = false;
+
+        while(!done)
+        {
+            // Randomly choose an eligible parent.
+            parent = getRandomNumber(POPULATION_SIZE - 1);
+            if(parent != parentA){
+                if(selected[parent] == true){
+                    done = true;
+                }
+            }
+        }
+
+        return parent;
+    }
+
+    private  int getRandomNumber(int high) //int low, int high)
+    {
+        return new Random().nextInt(high);
     }
 
     // accessors

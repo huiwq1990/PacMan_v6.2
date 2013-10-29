@@ -1,5 +1,7 @@
 package ga;
 
+import java.util.Random;
+
 public class Gene {
     // --- variables:
 
@@ -38,7 +40,7 @@ public class Gene {
     public void randomizeChromosome(){
         // code for randomization of initial weights goes HERE
     	for(int i=0; i<mChromosome.length;i++ ){
-    		
+    		mChromosome[i] =  new Random().nextInt(1);
     	}
     }
 
@@ -55,6 +57,23 @@ public class Gene {
     public Gene[] reproduce(Gene other){
         Gene[] result = new Gene[2];
         // initilization of offspring chromosome goes HERE
+        
+        int randomPoint = 0;
+
+        randomPoint = new Random().nextInt(GeneticAlgorithm.CHROMOSOME_SIZE);
+       
+        for(int i = 0; i < GeneticAlgorithm.CHROMOSOME_SIZE; i++)
+        {
+            if(i < randomPoint){
+            	result[0].mChromosome[i] = mChromosome[i];
+            	result[1].mChromosome[i] = other.mChromosome[i];
+            }else if(i >= randomPoint){
+            	result[0].mChromosome[i] =other.mChromosome[i];
+            	result[1].mChromosome[i] =  mChromosome[i];
+            }
+        }
+        
+        
         return result;
     }
 
