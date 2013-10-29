@@ -20,7 +20,10 @@ public class  SimpleMLPAgent  extends Controller<MOVE>  implements  Evolvable {
 	{
 		
 		int current=game.getPacmanCurrentNodeIndex();
-		game.
+		
+		
+		
+//		game.
 //		 byte[][] scene = observation.getLevelSceneObservation(/*1*/);
 //	        double[] inputs = new double[]{probe(-1, -1, scene), probe(0, -1, scene), probe(1, -1, scene),
 //	                              probe(-1, 0, scene), probe(0, 0, scene), probe(1, 0, scene),

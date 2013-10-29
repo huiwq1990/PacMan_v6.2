@@ -45,6 +45,18 @@ public class ES implements EA {
         this.task = task;
 
     }
+    
+    
+    public ES( Evolvable initial, int populationSize) {
+        this.population = new Evolvable[populationSize];
+        for (int i = 0; i < population.length; i++) {
+            population[i] = initial.getNewInstance();
+        }
+        this.fitness = new double[populationSize];
+        this.elite = populationSize / 2;
+        this.task = null;
+
+    }
 
     public void nextGeneration() {
         for (int i = 0; i < elite; i++) {
