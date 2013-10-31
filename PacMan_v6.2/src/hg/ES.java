@@ -30,7 +30,7 @@ public class ES implements EA {
     
     
     
-    Controller<MOVE> pacManController;
+//    Controller<MOVE> pacManController = new SimpleMLPAgent();
     Controller<EnumMap<GHOST,MOVE>> ghostController = new StarterGhosts();
     Random rnd=new Random(0);
     Game game;
@@ -75,15 +75,15 @@ public class ES implements EA {
         fitness[which] = 0;
         for (int i = 0; i < evaluationRepetitions; i++) {
             population[which].reset();
-            
+            Controller<EnumMap<GHOST,MOVE>> ghostController = new StarterGhosts();
             game=new Game(rnd.nextLong());			
 			while(!game.gameOver())
 			{
-		        game.advanceGame(pacManController.getMove(game.copy(),System.currentTimeMillis()+DELAY),
+		        game.advanceGame( (( Controller<MOVE>)population[which]).getMove(game.copy(),System.currentTimeMillis()+DELAY),
 		        		ghostController.getMove(game.copy(),System.currentTimeMillis()+DELAY));
 			}			
 			fitness[which]+=game.getScore();            
-            
+//            System.out.println("which " + which + " fitness " + fitness[which]);
 //            fitness[which] += task.evaluate((Agent) population[which])[0];
 //            LOGGER.println("which " + which + " fitness " + fitness[which], LOGGER.VERBOSE_MODE.INFO);
         }

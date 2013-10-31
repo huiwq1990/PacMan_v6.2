@@ -2,6 +2,7 @@ package hg;
 
 import pacman.controllers.Controller;
 import pacman.game.Game;
+import pacman.game.Constants.GHOST;
 import pacman.game.Constants.MOVE;
 
 
@@ -14,6 +15,27 @@ import pacman.game.Constants.MOVE;
  */
 public class  SimpleMLPAgent  extends Controller<MOVE>  implements  Evolvable {
 	
+	
+	public int mazeIndex;
+	public int currentLevel;
+	public int pacmanPosition;
+	public int pacmanLivesLeft;
+	public int currentScore;
+	public int totalGameTime;
+	public int currentLevelTime;
+	public int numOfPillsLeft;
+	public int numOfPowerPillsLeft;
+	
+	public boolean isBlinkyEdible = false;
+	public boolean isInkyEdible = false;
+	public boolean isPinkyEdible = false;
+	public boolean isSueEdible = false;
+	
+	public int blinkyDist = -1;
+	public int inkyDist = -1;
+	public int pinkyDist = -1;
+	public int sueDist = -1;
+	
 	private MOVE myMove=MOVE.NEUTRAL;
 	
 	public MOVE getMove(Game game, long timeDue) 
@@ -21,30 +43,82 @@ public class  SimpleMLPAgent  extends Controller<MOVE>  implements  Evolvable {
 		
 		int current=game.getPacmanCurrentNodeIndex();
 		
+		this.mazeIndex = game.getMazeIndex();
+		this.currentLevel = game.getCurrentLevel();
+		this.pacmanPosition = game.getPacmanCurrentNodeIndex();
+		this.pacmanLivesLeft = game.getPacmanNumberOfLivesRemaining();
+		this.currentScore = game.getScore();
+		this.totalGameTime = game.getTotalTime();
+		this.currentLevelTime = game.getCurrentLevelTime();
+		this.numOfPillsLeft = game.getNumberOfActivePills();
+		this.numOfPowerPillsLeft = game.getNumberOfActivePowerPills();
 		
 		
-//		game.
-//		 byte[][] scene = observation.getLevelSceneObservation(/*1*/);
-//	        double[] inputs = new double[]{probe(-1, -1, scene), probe(0, -1, scene), probe(1, -1, scene),
-//	                              probe(-1, 0, scene), probe(0, 0, scene), probe(1, 0, scene),
-//	                                probe(-1, 1, scene), probe(0, 1, scene), probe(1, 1, scene),
-//	                                1};
-//	        double[] outputs = mlp.propagate (inputs);
-//	        boolean[] action = new boolean[numberOfOutputs];
-//	        for (int i = 0; i < action.length; i++) {
-//	            action[i] = outputs[i] > 0;
-//	        }
-//	        return action;
-		return myMove;
-	}
+		if (game.getGhostLairTime(GHOST.BLINKY) == 0) {
+			this.isBlinkyEdible = game.isGhostEdible(GHOST.BLINKY);
+			this.blinkyDist = game.getShortestPathDistance(game.getPacmanCurrentNodeIndex(),game.getGhostCurrentNodeIndex(GHOST.BLINKY));
+		}
+		
+		if (game.getGhostLairTime(GHOST.INKY) == 0) {
+		this.isInkyEdible = game.isGhostEdible(GHOST.INKY);
+		this.inkyDist = game.getShortestPathDistance(game.getPacmanCurrentNodeIndex(),game.getGhostCurrentNodeIndex(GHOST.INKY));
+		}
+		
+		if (game.getGhostLairTime(GHOST.PINKY) == 0) {
+		this.isPinkyEdible = game.isGhostEdible(GHOST.PINKY);
+		this.pinkyDist = game.getShortestPathDistance(game.getPacmanCurrentNodeIndex(),game.getGhostCurrentNodeIndex(GHOST.PINKY));
+		}
+		
+		if (game.getGhostLairTime(GHOST.SUE) == 0) {
+		this.isSueEdible = game.isGhostEdible(GHOST.SUE);
+		this.sueDist = game.getShortestPathDistance(game.getPacmanCurrentNodeIndex(),game.getGhostCurrentNodeIndex(GHOST.SUE));
+		}
+		
+		
+		 double[] inputs = new double[]{mazeIndex,currentLevel,pacmanPosition,pacmanLivesLeft,currentScore,totalGameTime,currentLevelTime,numOfPillsLeft,numOfPowerPillsLeft,blinkyDist,inkyDist,pinkyDist,sueDist};
 
+	        double[] outputs = mlp.propagate (inputs);
+//	        double[] action = new double[numberOfOutputs];
+	        double maxOutput = Double.MIN_VALUE;
+	        int maxNum =0;
+	        for (int i = 0; i < outputs.length; i++) {
+	            if(outputs[i]>maxOutput){
+	            	maxOutput = outputs[i];
+	            	maxNum = i;
+	            	break;
+	            }
+	        }
+
+	        
+//	        return action;
+		return getMove(maxNum);
+	}
+	public static MOVE getMove(int i){ 
+
+	     switch(i){ 
+
+	     case 0: return MOVE.DOWN;  
+	     
+	     case 1: return MOVE.LEFT; 
+
+	     case 2:  return MOVE.NEUTRAL;
+
+	     case 3:  return MOVE.RIGHT; 
+
+	     case 4:  return MOVE.UP; 
+
+	     } 
+	     return null;
+
+	} 
+	
     private MLP mlp;
     private String name = "SimpleMLPAgent";
-    final int numberOfOutputs = 6;
-    final int numberOfInputs = 10;
+    final int numberOfOutputs = 5;
+    final int numberOfInputs = 13;
 
     public SimpleMLPAgent () {
-        mlp = new MLP (numberOfInputs, 10, numberOfOutputs);
+        mlp = new MLP (numberOfInputs, 15, numberOfOutputs);
     }
 
     private SimpleMLPAgent (MLP mlp) {

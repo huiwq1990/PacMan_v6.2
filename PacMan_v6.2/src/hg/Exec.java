@@ -3,6 +3,7 @@ package hg;
 import pacman.Executor;
 import pacman.controllers.examples.RandomGhosts;
 import pacman.controllers.examples.RandomPacMan;
+import pacman.controllers.examples.StarterGhosts;
 
 public class Exec {
 
@@ -13,7 +14,7 @@ public class Exec {
 		
 		//run multiple games in batch mode - good for testing.
 		int numTrials=10;
-		exec.runExperiment(new RandomPacMan(),new RandomGhosts(),numTrials);
+		exec.runExperiment(new RandomPacMan(),new StarterGhosts(),numTrials);
 	}
 
 }

@@ -2,10 +2,11 @@ package hg;
 
 import pacman.controllers.Controller;
 import pacman.game.Constants.MOVE;
+import wox.serial.Easy;
 
 public class EsMain {
 	 final static int generations = 100;
-	    final static int populationSize = 100;
+	    final static int populationSize = 1000;
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		 Evolvable initial = new SimpleMLPAgent();
@@ -19,14 +20,10 @@ public class EsMain {
               System.out.println("Generation " + gen + " best " + bestResult);
             
               Controller<MOVE> a = (Controller<MOVE>) es.getBests()[0];
-             
-//              double result = task.evaluate(a)[0];
-//              options.setVisualization(false);
-//              options.setMaxFPS(true);
-//              Easy.save (es.getBests()[0], "evolved.xml");
-//              if (result > 4000) {
-//                  break; //finished
-//              }
+             es.getBestFitnesses();
+              
+             Easy.save (es.getBests()[0], "evolved.xml");
+
           }
 		
 	}
