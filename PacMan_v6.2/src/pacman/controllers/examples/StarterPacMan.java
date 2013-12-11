@@ -23,6 +23,13 @@ public class StarterPacMan extends Controller<MOVE>
 	public MOVE getMove(Game game,long timeDue)
 	{			
 		int current=game.getPacmanCurrentNodeIndex();
+//		game.g
+//		System.out.println(game.getGameState());
+		int[] nodes = game.getNeighbouringNodes(current);
+//		System.out.println(game.getNodeXCood(current));
+		game.
+		
+	
 		
 		//Strategy 1: if any non-edible ghost is too close (less than MIN_DISTANCE), run away
 		for(GHOST ghost : GHOST.values())
