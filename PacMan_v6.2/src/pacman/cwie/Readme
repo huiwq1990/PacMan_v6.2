@@ -1,0 +1,9 @@
+Peter Venkman
+
+Simple Genetic Algortihm
+
+It cuts half of the populaton (with the least fitness) do a simple cross over. And mutates with the proberbility of 0.05.
+
+The fitness function is horribly broken and it right now only scores ~600, i have not been able to find a solution for this.
+
+Run it -> new TheGhostBusters()

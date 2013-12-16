@@ -23,6 +23,9 @@ public class HumanController extends Controller<MOVE>
 
     public MOVE getMove(Game game,long dueTime)
     {
+    	int index = game.getPacmanCurrentNodeIndex();
+    	System.out.println();
+    	System.out.println(game.getNodeXCood(index)+" "+game.getNodeYCood(index));
     	switch(input.getKey())
     	{
 	    	case KeyEvent.VK_UP: 	return MOVE.UP;
