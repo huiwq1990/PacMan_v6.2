@@ -4,9 +4,16 @@
 /hg
 /pacman
 <<<<<<< HEAD
+<<<<<<< HEAD
 /dataRecording
 /hg
 /rl
+=======
+/rl
+/wox
+=======
+/pacman
+>>>>>>> refs/remotes/origin/master
 =======
 /rl
 /wox
